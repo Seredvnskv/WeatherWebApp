@@ -1,6 +1,5 @@
 package com.example.weatherwebapp.controller;
 
-import com.example.weatherwebapp.client.weather.dto.TomorrowRealTimeWeatherDTO;
 import com.example.weatherwebapp.model.WeatherDTO;
 import com.example.weatherwebapp.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +20,12 @@ public class WeatherController {
     }
 
     @GetMapping("")
-    public ResponseEntity<TomorrowRealTimeWeatherDTO> getRealTimeWeather(@RequestParam(required = true) String location) {
+    public ResponseEntity<WeatherDTO> getRealTimeWeather(@RequestParam(required = true) String location) {
         return ResponseEntity.ok(weatherService.getRealTimeWeather(location.toLowerCase()));
     }
 
     @GetMapping("/coordinates")
-    public ResponseEntity<TomorrowRealTimeWeatherDTO> getWeatherByCoords(
+    public ResponseEntity<WeatherDTO> getWeatherByCoords(
             @RequestParam double lat,
             @RequestParam double lon) {
         return ResponseEntity.ok(weatherService.getRealTimeWeather(lat, lon));
