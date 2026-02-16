@@ -4,8 +4,15 @@ import lombok.Builder;
 
 @Builder
 public record WeatherDTO(
-        double temperature,
-        double humidity,
-        double windSpeed,
-        double visibility
+        Double temperature,
+        Double humidity,
+        Double visibility,
+        Double pressureSeaLevel,
+        Double rainIntensity,
+        Double snowIntensity,
+        Double freezingRainIntensity,
+        Double sleetIntensity,
+        Double cloudCover,
+        Double windDirection,
+        Double windSpeed
 ) { }
