@@ -1,9 +1,7 @@
 package com.example.weatherwebapp.client.weather;
 
-import com.example.weatherwebapp.client.geocode.dto.ForwardGeocodeDTO;
-import com.example.weatherwebapp.client.weather.dto.TomorrowRealTimeWeatherDTO;
-import com.example.weatherwebapp.model.Coordinates;
-import com.example.weatherwebapp.service.GeocodingService;
+import com.example.weatherwebapp.client.weather.dto.forecast.TomorrowForecastDTO;
+import com.example.weatherwebapp.client.weather.dto.realtime.TomorrowRealTimeWeatherDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,22 +12,18 @@ import java.util.Map;
 @Component
 public class WeatherClient {
     private final WebClient webClient;
-    private final GeocodingService geocodingService;
 
     @Value("${weather.api.key}")
     private String WEATHER_API_KEY;
 
     @Autowired
-    public WeatherClient (WebClient.Builder builder, GeocodingService geocodingService) {
+    public WeatherClient (WebClient.Builder builder) {
         this.webClient = builder.baseUrl("https://api.tomorrow.io").build();
-        this.geocodingService = geocodingService;
     }
 
     public TomorrowRealTimeWeatherDTO getRealTimeWeather(String location) {
-        Coordinates coordinates = extractCoordinates(geocodingService.forwardGeocodingRequest(location));
-
         return callGetMethod("/v4/weather/realtime", TomorrowRealTimeWeatherDTO.class, Map.of(
-                "location", coordinates.latitude() + ", " + coordinates.longitude(),
+                "location", location,
                 "units", "metric"
         ));
     }
@@ -37,6 +31,14 @@ public class WeatherClient {
     public TomorrowRealTimeWeatherDTO getRealTimeWeather(double latitude, double longitude) {
         return callGetMethod("/v4/weather/realtime", TomorrowRealTimeWeatherDTO.class, Map.of(
                 "location", latitude + ", " + longitude,
+                "units", "metric"
+        ));
+    }
+
+    public TomorrowForecastDTO getWeatherForecast(String location) {
+        return callGetMethod("/v4/weather/forecast", TomorrowForecastDTO.class, Map.of(
+                "location", location,
+                "timesteps", "1d",
                 "units", "metric"
         ));
     }
@@ -57,9 +59,5 @@ public class WeatherClient {
                 .retrieve()
                 .bodyToMono(responseType)
                 .block();
-    }
-
-    private Coordinates extractCoordinates(ForwardGeocodeDTO dto) {
-        return new Coordinates(Double.parseDouble(dto.latitude()), Double.parseDouble(dto.longitude()));
     }
 }

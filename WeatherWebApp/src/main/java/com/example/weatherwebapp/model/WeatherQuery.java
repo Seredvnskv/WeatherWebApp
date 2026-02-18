@@ -23,8 +23,10 @@ public class WeatherQuery {
     private UUID id;
 
     private LocalDateTime time;
+    private String location;
     private double latitude;
     private double longitude;
-    private String location;
-    private String type;
+    private double temperature;
+    private double humidity;
+    private double windSpeed;
 }
