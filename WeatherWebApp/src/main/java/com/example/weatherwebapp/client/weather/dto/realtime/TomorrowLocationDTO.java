@@ -1,4 +1,4 @@
-package com.example.weatherwebapp.client.weather.dto;
+package com.example.weatherwebapp.client.weather.dto.realtime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
